@@ -1,10 +1,10 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 const pool = new Pool({
-    host: 'localhost',
-    user: 'postgres',
-    database: 'postgres',
-    password: 'Postgre1991',
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
   })
 
 // GET
@@ -67,32 +67,52 @@ const createEntry = async (entry) => {
 //UPDATE
 
 const updateEntry = async (entry) => {
+
     const {title,content,email,category} = entry;
     let client,result;
     try{
+    client = await pool.connect(); // Espera a abrir conexion
+    const data = await client.query(`UPDATE entries
+                                    SET content = $2, category = $3
+                                    WHERE title=$1`
+                                    ,[title,content,category])
+    result = data.rowCount
+    }catch(err){
+        console.log(err);
+        throw err;
+    }finally{
+        client.release();
+    }
+    return result
+
+}
+
+
+// DELETE
+
+const deleteEntry = async (entry) => {
+    const {title} = entry;
+    let client,result;
+    try{
         client = await pool.connect(); // Espera a abrir conexion
-        const data = await client.query(`UPDATE entries
-                                    SET content = $2, email=$3, category = $4
-                                    WHERE title=$1)`
-                                    ,[title,content,email,category])
+        const data = await client.query(`DELETE FROM entries
+                                        WHERE title=$1`
+                                    ,[title])
         result = data.rowCount
     }catch(err){
         console.log(err);
         throw err;
     }finally{
-        client.release();    
+        client.release();
     }
     return result
 }
-
-// DELETE 
-
 
 const entries = {
     getEntry,
     getAllEntries,
     createEntry,
-    //deleteEntry
+    deleteEntry,
     updateEntry
 }
 

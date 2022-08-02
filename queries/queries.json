@@ -1,0 +1,4 @@
+{
+    "getAllAuthors" : "SELECT * FROM authors",
+    "getAuthorByMail" : "SELECT * FROM authors WHERE email=email"
+}

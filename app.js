@@ -8,7 +8,7 @@ const owl = require('cowsay2/cows/owl');
 
 //Rutas de productos
 const entriesApiRouter = require('../Ejercicio_node_sql/routes/entriesApiRouter')
-
+const authorsApiRouter = require('../Ejercicio_node_sql/routes/authorsApiRouter')
 //Luego propios modulos
 const calc = require('./utils/calculator');
 
@@ -35,6 +35,7 @@ app.use(express.json())
 
 //API
 app.use('/api/entries', entriesApiRouter)
+app.use('/api/authors', authorsApiRouter)
 
 //WEB URL
 // http://localhost:3000/products
