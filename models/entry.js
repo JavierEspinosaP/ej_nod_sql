@@ -1,24 +1,23 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 const pool = new Pool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    database: process.env.DB_DATABASE,
-    password: process.env.DB_PASSWORD,
+    host: 'localhost',
+    user: 'postgres',
+    database: 'postgres',
+    password: 'Postgre1991',
   })
 
 // GET
-const getEntriesByEmail = async (email) => {
+const getEntry = async () => {
     let client,result;
     try{
         client = await pool.connect(); // Espera a abrir conexion
         const data = await client.query(`
-                SELECT e.title,e.content,e.date,e.category,a.name,a.surname,a.image
+                SELECT e.id_entry,e.title,e.content,e.date,a.email,e.category
                 FROM entries AS e
                 INNER JOIN authors AS a
                 ON e.id_author=a.id_author
-                WHERE a.email=$1
-                ORDER BY e.title;`,[email])
+                ORDER BY e.title;`)
         result = data.rows
     }catch(err){
         console.log(err);
@@ -52,8 +51,29 @@ const createEntry = async (entry) => {
     try{
         client = await pool.connect(); // Espera a abrir conexion
         const data = await client.query(`INSERT INTO entries(title,content,id_author,category) 
-                                    VALUES ($1,$2,
-                                    (SELECT id_author FROM authors WHERE email=$3),$4)`
+                                    VALUES ($1,$2,(SELECT id_author FROM authors WHERE email=$3),$4)`
+                                    ,[title,content,email,category])
+        result = data.rowCount
+    }catch(err){
+        console.log(err);
+        throw err;
+    }finally{
+        client.release();    
+    }
+    return result
+}
+
+
+//UPDATE
+
+const updateEntry = async (entry) => {
+    const {title,content,email,category} = entry;
+    let client,result;
+    try{
+        client = await pool.connect(); // Espera a abrir conexion
+        const data = await client.query(`UPDATE entries
+                                    SET content = $2, email=$3, category = $4
+                                    WHERE title=$1)`
                                     ,[title,content,email,category])
         result = data.rowCount
     }catch(err){
@@ -66,14 +86,14 @@ const createEntry = async (entry) => {
 }
 
 // DELETE 
-//UPDATE
+
 
 const entries = {
-    getEntriesByEmail,
+    getEntry,
     getAllEntries,
     createEntry,
     //deleteEntry
-    //updateEntry
+    updateEntry
 }
 
 module.exports = entries;

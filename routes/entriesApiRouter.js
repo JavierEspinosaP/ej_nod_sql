@@ -6,6 +6,7 @@ const entriesApiRouter = express.Router();
 
 entriesApiRouter.get("/", entriesApiControllers.getEntries); 
 entriesApiRouter.post("/", entriesApiControllers.createEntry)
+entriesApiRouter.put("/", entriesApiControllers.updateEntry)
 
 //GET http://localhost:3000/entries -> ALL
 //GET http://localhost:3000/entries?email=hola@gmail.com -> por email

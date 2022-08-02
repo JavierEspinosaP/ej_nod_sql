@@ -8,7 +8,7 @@ const entry = require('../models/entry')
 const getEntries = async (req, res) => {
     let entries;
     if (req.query.email){
-        entries = await entry.getEntriesByEmail(req.query.email);
+        entries = await entry.getEntry(req.query.email);
     }
     else{
         entries = await entry.getAllEntries();
@@ -22,9 +22,15 @@ const createEntry = async (req, res) => {
     data: newEntry})
 }
 
+const updateEntry = async (req, res) => {
+    const editEntry = req.body; 
+    const response = await entry.updateEntry(editEntry)
+    res.status(200).json({"update": response, data: editEntry})
+}
+
 module.exports = {
     getEntries, 
     createEntry, 
+    updateEntry,
     //deleteEntry, --> DELETE method http
-    //updateEntry --> PUT method http
 }

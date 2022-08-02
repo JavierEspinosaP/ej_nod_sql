@@ -19,7 +19,6 @@ const checkApiKey = require('./middlewares/auth_API_KEY')
 const app = express()
 const port = 3000
 
-
 //View engine
 
 app.set('view engine', 'pug');
@@ -76,7 +75,6 @@ app.get('/perritos', (req, res) => {
 //Middleware error 404
 // Respuesta por defecto para rutas no existentes
 app.use(manage404);
-
 
 app.listen(port, () => {
   console.log(cowsay.say(`Mi servidor funciona en http://localhost:${port}`, { cow: owl }))
