@@ -1,14 +1,14 @@
-const { Pool } = require('pg');
 require('dotenv').config();
 const queries = require('../queries/queries.json')
+const credentials = require('../utils/db_pgsql')
 
-
+const { Pool } = require('pg');
 const pool = new Pool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     database: process.env.DB_DATABASE,
     password: process.env.DB_PASSWORD,
-  })
+  })  
 
 // GET
 
@@ -16,7 +16,7 @@ const getAllAuthors = async () => {
     let client,result;
     try{
         client = await pool.connect(); // Espera a abrir conexion
-        const data = await client.query(queries.getAllAuthors)
+        const data = await client.query("SELECT * FROM authors")
         result = data.rows
     }catch(err){
         console.log(err);
@@ -30,7 +30,7 @@ const getAuthorByMail = async (entry) => {
     let client,result;
     try{
         client = await pool.connect(); // Espera a abrir conexion
-        const data = await client.query(queries.getAuthorByMail)
+        const data = await client.query(`SELECT * FROM authors WHERE email=$1`, [email])
         result = data.rows
     }catch(err){
         console.log(err);

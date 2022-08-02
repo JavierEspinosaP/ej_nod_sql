@@ -10,7 +10,6 @@ const owl = require('cowsay2/cows/owl');
 const entriesApiRouter = require('../Ejercicio_node_sql/routes/entriesApiRouter')
 const authorsApiRouter = require('../Ejercicio_node_sql/routes/authorsApiRouter')
 //Luego propios modulos
-const calc = require('./utils/calculator');
 
 // Tu middleware
 const manage404 = require('./middlewares/error404')
