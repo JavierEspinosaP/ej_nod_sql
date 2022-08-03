@@ -15,7 +15,7 @@ const getAllAuthors = async (req, res) => {
             return res.status(200).json(entries);  
         }
     } catch (error) {
-        return res.status(400).json("Error"+error);
+        return res.status(400).json({"Error: ": error});
     }
 };
 
@@ -38,7 +38,7 @@ const updateAuthors = async (req, res) => {
         res.status(200).json({ message: `usuario actualizado: ${req.body.name} ${req.body.surname}`})
     }
     catch (err) {
-        res.status(400).json({ "message": "bad request" })
+        res.status(400).json({ "message": err })
     }
     //meter try catch
 }
@@ -46,7 +46,7 @@ const updateAuthors = async (req, res) => {
 const deleteAuthors = async (req, res) => {
     const newEntry = req.body; // {name}
     try{const response = await entry_authors.deleteAuthors(newEntry)
-    res.status(201).json({"message": `Se ha borrado ${req.body.name} ${req.body.surname}`})}
+    res.status(418).json({"message": `Se ha borrado ${req.body.name} ${req.body.surname}`})}
     catch(error){
     res.status(400).json({"error": error})
     }

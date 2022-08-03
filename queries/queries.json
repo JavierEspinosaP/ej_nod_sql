@@ -1,8 +1,0 @@
-
-{
-    "getAllAuthors" : "SELECT * FROM authors",
-    "getAuthorByMail" : "`SELECT * FROM authors WHERE email=$1`, [email]",
-    "createAuthor": "`INSERT INTO authors(name,surname,email,image) VALUES ($1,$2,$3,$4)` ,[name,surname,email,image]",
-    "updateAuthor": "`UPDATE authors SET surname= $2, email= $3, image= $4 WHERE name=$1` ,[name,surname,email,image]",
-    "deleteAuthors": "`DELETE FROM authors WHERE name=$1`,[name]"
-}
