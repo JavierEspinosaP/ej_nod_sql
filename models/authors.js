@@ -8,7 +8,7 @@ const pool = require('../utils/db_pgsql')
 const getAllAuthors = async () => {
     let client,result;
     try{
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect();
         const data = await client.query(author_queries.getAllAuthors)
         result = data.rows
     }catch(err){
@@ -19,10 +19,10 @@ const getAllAuthors = async () => {
     }
     return result
 }
-const getAuthorByMail = async (entry) => {
+const getAuthorByMail = async () => {
     let client,result;
     try{
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect();
         const data = await client.query(author_queries.getAuthorByMail, [email])
         result = data.rows
     }catch(err){
@@ -39,7 +39,7 @@ const createAuthor = async (entry) => {
     const {name,surname,email,image} = entry;
     let client,result;
     try{
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect();
         const data = await client.query(author_queries.createAuthor ,[name,surname,email,image])
         result = data.rowCount
     }catch(err){
@@ -57,7 +57,7 @@ const updateAuthor = async (entry) => {
     const {name,surname,email,image} = entry;
     let client,result;
     try{
-    client = await pool.connect(); // Espera a abrir conexion
+    client = await pool.connect();
     const data = await client.query(author_queries.createAuthor
                                     ,[name,surname,email,image])
     result = data.rowCount
@@ -76,7 +76,7 @@ const deleteAuthors = async (entry) => {
     const {name} = entry;
     let client,result;
     try{
-        client = await pool.connect(); // Espera a abrir conexion
+        client = await pool.connect();
         const data = await client.query(author_queries.deleteAuthors
                                     ,[name])
         result = data.rowCount

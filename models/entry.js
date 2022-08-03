@@ -1,23 +1,13 @@
-const { Pool } = require('pg');
 require('dotenv').config();
-const pool = new Pool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    database: process.env.DB_DATABASE,
-    password: process.env.DB_PASSWORD,
-  })
+const entries_queries = require('../queries/entries_queries')
+const pool = require('../utils/db_pgsql')
 
 // GET
 const getEntry = async () => {
     let client,result;
     try{
         client = await pool.connect(); // Espera a abrir conexion
-        const data = await client.query(`
-                SELECT e.id_entry,e.title,e.content,e.date,a.email,e.category
-                FROM entries AS e
-                INNER JOIN authors AS a
-                ON e.id_author=a.id_author
-                ORDER BY e.title;`)
+        const data = await client.query(entries_queries.getEntry)
         result = data.rows
     }catch(err){
         console.log(err);
@@ -33,7 +23,7 @@ const getAllEntries = async () => {
     let client,result;
     try{
         client = await pool.connect(); // Espera a abrir conexion
-        const data = await client.query(`SELECT * FROM entries;`)
+        const data = await client.query(entries_queries.getAllEntries)
         result = data.rows
     }catch(err){
         console.log(err);
@@ -50,8 +40,7 @@ const createEntry = async (entry) => {
     let client,result;
     try{
         client = await pool.connect(); // Espera a abrir conexion
-        const data = await client.query(`INSERT INTO entries(title,content,id_author,category) 
-                                    VALUES ($1,$2,(SELECT id_author FROM authors WHERE email=$3),$4)`
+        const data = await client.query(entries_queries.createEntry
                                     ,[title,content,email,category])
         result = data.rowCount
     }catch(err){
@@ -72,9 +61,7 @@ const updateEntry = async (entry) => {
     let client,result;
     try{
     client = await pool.connect(); // Espera a abrir conexion
-    const data = await client.query(`UPDATE entries
-                                    SET content = $2, category = $3
-                                    WHERE title=$1`
+    const data = await client.query(entries_queries.updateEntry
                                     ,[title,content,category])
     result = data.rowCount
     }catch(err){
@@ -95,8 +82,7 @@ const deleteEntry = async (entry) => {
     let client,result;
     try{
         client = await pool.connect(); // Espera a abrir conexion
-        const data = await client.query(`DELETE FROM entries
-                                        WHERE title=$1`
+        const data = await client.query(entries_queries.deleteEntry
                                     ,[title])
         result = data.rowCount
     }catch(err){
@@ -118,24 +104,3 @@ const entries = {
 
 module.exports = entries;
 
-
-// Pruebas
-
-    // getEntriesByEmail("birja@thebridgeschool.es")
-    // .then(data=>console.log(data))
-
-
-
-// getAllEntries()
-// .then(data=>console.log(data))
-
-
-
-// let newEntry = {
-//     title:"Nos gustan las tortillas",
-//     content:"En el Marquina las tortillas vuelan antes de las 12",
-//     email:"albertu@thebridgeschool.es",
-//     category:"gastronomía"}
-
-// createEntry(newEntry)
-// .then(data=>console.log(data))

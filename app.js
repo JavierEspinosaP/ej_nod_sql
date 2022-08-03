@@ -13,31 +13,19 @@ const authorsApiRouter = require('../Ejercicio_node_sql/routes/authorsApiRouter'
 
 //Middlewares
 const manage404 = require('./middlewares/error404')
-const checkApiKey = require('./middlewares/auth_API_KEY')
 
 const app = express()
 const port = 3000
 
-//View engine
-
-app.set('view engine', 'pug');
-app.set('views','./views');
-
 //Permite leer body recibido en una petición
 app.use(express.json())
 
-// Middleware de acceso para TODAS las rutas
-// app.use(checkApiKey)
-
-// Middleware de acceso para las rutas de products
-// app.use('/products',checkApiKey, productsRoutes);
 
 //API
 app.use('/api/entries', entriesApiRouter)
 app.use('/api/authors', authorsApiRouter)
 
 //Middleware error 404
-// Respuesta por defecto para rutas no existentes
 app.use(manage404);
 
 app.listen(port, () => {

@@ -1,10 +1,5 @@
 const entry = require('../models/entry')
 
-//GET http://localhost:3000/entries -> ALL
-//GET http://localhost:3000/entries?email=hola@gmail.com -> por email
-//POST http://localhost:3000/entries?email=hola@gmail.com
-
-
 const getEntries = async (req, res) => {
     let entries;
     entries = await entry.getAllEntries();
